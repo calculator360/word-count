@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Analyzer</title>
+    <title>Word Counter & Text Analyzer
+</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -131,6 +132,7 @@
     <button class="toggle-dark-mode" onclick="toggleDarkMode()">Dark Mode</button>
 
     <div class="container1">
+     <h1>Advanced Word Counter & Text Analyzer</h1>
         <div class="button-container">
             <button id="copyButton">Copy</button>
             <button id="pasteButton">Paste</button>
