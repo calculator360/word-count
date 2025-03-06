@@ -1,884 +1,157 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Word Count Analyzer</title>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --primary-dark: #4f46e5;
-            --secondary: #64748b;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --light: #f1f5f9;
-            --dark: #1e293b;
-            --text: #334155;
-            --border-radius: 0.5rem;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --transition: all 0.3s ease;
-        }
 
-        * {
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
-        body {
-            background-color: #f8fafc;
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 1rem;
+        .container1 {
+            margin: 50px auto;
+            width: 90%;
+            max-width: 800px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
+        .output-box {
+            background: linear-gradient(145deg, #e6e6e6, #ffffff);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.7);
         }
 
-        .app-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .app-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .app-subtitle {
-            color: var(--secondary);
-            font-size: 1.1rem;
-        }
-
-        .main-panel {
+        .output-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+            
+            gap: 15px;
         }
 
-        @media (min-width: 1024px) {
-            .main-panel {
-                grid-template-columns: 1fr 1fr;
-            }
+        .output-item {
+            background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+            
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.7);
+            color: #333;
         }
 
-        .card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            transition: var(--transition);
+        .output-item:hover {
+            background: linear-gradient(145deg, #dcdcdc, #f0f0f0);
+            box-shadow: 8px 8px 14px rgba(0, 0, 0, 0.2), -8px -8px 14px rgba(255, 255, 255, 0.9);
         }
 
-        .card:hover {
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card-header {
-            padding: 1.25rem 1.5rem;
-            background-color: var(--primary);
-            color: white;
-            font-weight: 600;
-            font-size: 1.25rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-header .icon {
-            font-size: 1.25rem;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .input-area {
-            width: 100%;
-            min-height: 300px;
-            padding: 1rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.375rem;
-            font-size: 1rem;
-            resize: vertical;
-            transition: var(--transition);
-        }
-
-        .input-area:focus {
+        textarea {
+            height: 300px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #555;
             outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            width: 100%;
+            box-shadow: 0 0 1px #000;
+            resize: none;
+        }
+
+        textarea:focus {
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.2), -8px -8px 16px rgba(255, 255, 255, 0.9);
         }
 
         .button-container {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .btn {
-            padding: 0.625rem 1.25rem;
+        .button-container button {
+            background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
             border: none;
-            border-radius: 0.375rem;
-            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.7);
+            transition: all 0.2s ease-in-out;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
+        .button-container button:hover {
+            background: linear-gradient(145deg, #dcdcdc, #f0f0f0);
+            box-shadow: 8px 8px 14px rgba(0, 0, 0, 0.2), -8px -8px 14px rgba(255, 255, 255, 0.9);
+            transform: scale(1.05);
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
+        .dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
-        .btn-secondary {
-            background-color: var(--secondary);
-            color: white;
+        .dark-mode .output-box, .dark-mode textarea, .dark-mode button {
+            background: linear-gradient(145deg, #1e1e1e, #101010);
+            color: #e0e0e0;
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7), -6px -6px 12px rgba(255, 255, 255, 0.1);
         }
 
-        .btn-secondary:hover {
-            background-color: #4b5563;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-        }
-
-        .btn-outline:hover {
-            background-color: #f1f5f9;
-        }
-
-        .stats-container {
-            margin-top: 1.5rem;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        @media (min-width: 640px) {
-            .stat-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .stat-card {
-            background-color: #f8fafc;
-            padding: 1.25rem;
-            border-radius: 0.375rem;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-
-        .stat-value {
-            font-size: 1.875rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            color: var(--secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .words-stat {
-            color: var(--primary);
-        }
-
-        .chars-stat {
-            color: var(--success);
-        }
-
-        .sentences-stat {
-            color: var(--warning);
-        }
-
-        .paragraph-stat {
-            color: var(--danger);
-        }
-
-        .readtime-stat {
-            color: var(--primary-dark);
-        }
-
-        .progress-container {
-            margin-top: 1.5rem;
-        }
-
-        .progress-item {
-            margin-bottom: 1rem;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .progress-label {
-            font-weight: 500;
-        }
-
-        .progress-value {
-            font-weight: 600;
-        }
-
-        .progress-bar {
-            height: 0.5rem;
-            background-color: #e2e8f0;
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width 0.5s ease;
-        }
-
-        .grade-excellent {
-            background-color: var(--success);
-        }
-
-        .grade-good {
-            background-color: var(--primary);
-        }
-
-        .grade-average {
-            background-color: var(--warning);
-        }
-
-        .grade-poor {
-            background-color: var(--danger);
-        }
-
-        .word-table-container {
-            margin-top: 1.5rem;
-            overflow-x: auto;
-        }
-
-        .word-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .word-table th,
-        .word-table td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .word-table th {
-            background-color: #f1f5f9;
-            font-weight: 600;
-            color: var(--secondary);
-        }
-
-        .word-table tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .chart-container {
-            height: 250px;
-            margin-top: 1.5rem;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .tab-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .tab-item:hover {
-            color: var(--primary);
-        }
-
-        .tab-item.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .score-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .score-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        .score-details {
-            flex: 1;
-        }
-
-        .score-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .score-description {
-            color: var(--secondary);
-            font-size: 0.875rem;
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-        }
-
-        .tooltip .tooltip-text {
-            visibility: hidden;
-            width: 200px;
-            background-color: #334155;
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.75rem;
-            box-shadow: var(--shadow);
-        }
-
-        .tooltip .tooltip-text::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #334155 transparent transparent transparent;
-        }
-
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .feature-list {
-            list-style-type: none;
-            margin-top: 1rem;
-        }
-
-        .feature-item {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .feature-icon {
-            color: var(--primary);
-        }
-
-        .source-text {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: #f8fafc;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            max-height: 150px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        #keywords-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .keyword-tag {
-            background-color: #e0e7ff;
-            color: var(--primary-dark);
-            padding: 0.375rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .alert-warning {
-            background-color: #fef3c7;
-            color: #92400e;
-            border-left: 4px solid #f59e0b;
-        }
-
-        .alert-info {
-            background-color: #dbeafe;
-            color: #1e40af;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .suggestions-container {
-            margin-top: 1rem;
-        }
-        
-        .suggestion-item {
-            background-color: #f1f5f9;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .suggestion-header {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-        
-        .suggestion-type {
-            color: var(--primary);
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        .drop-zone {
-            border: 2px dashed #cbd5e1;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            transition: var(--transition);
-        }
-        
-        .drop-zone:hover, .drop-zone.dragover {
-            border-color: var(--primary);
-            background-color: #f1f5f9;
-        }
-        
-        .drop-zone-text {
-            color: var(--secondary);
-            margin-bottom: 0.5rem;
+        .dark-mode .output-item {
+            background: linear-gradient(145deg, #1e1e1e, #101010);
+            color: #e0e0e0;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <header class="app-header">
-            <h1 class="app-title">Advanced Word Count Analyzer</h1>
-            <p class="app-subtitle">Get detailed insights and statistics about your text</p>
-        </header>
 
-        <main class="main-panel">
-            <div class="card">
-                <div class="card-header">
-                    <span>Input Text</span>
-                    <span class="icon">📝</span>
-                </div>
-                <div class="card-body">
-                    <div class="drop-zone" id="drop-zone">
-                        <p class="drop-zone-text">Drop text file here or click to upload</p>
-                        <button class="btn btn-outline" id="file-select-btn">Select File</button>
-                        <input type="file" id="file-input" class="file-input" accept=".txt,.doc,.docx,.pdf,.md">
-                    </div>
-                    
-                    <textarea id="input-text" class="input-area" placeholder="Type or paste your text here..."></textarea>
-                    
-                    <div class="button-container">
-                        <button id="analyze-btn" class="btn btn-primary">
-                            <span>Analyze Text</span>
-                        </button>
-                        <button id="clear-btn" class="btn btn-secondary">
-                            <span>Clear</span>
-                        </button>
-                        <button id="copy-results-btn" class="btn btn-outline">
-                            <span>Copy Results</span>
-                        </button>
-                    </div>
-                    
-                    <div id="sample-text-container" class="alert alert-info" style="margin-top: 1rem">
-                        <div>
-                            <strong>Need sample text?</strong> 
-                            <button id="sample-text-btn" class="btn btn-outline" style="padding: 0.25rem 0.5rem; margin-left: 0.5rem;">Insert Sample</button>
-                        </div>
-                    </div>
-                </div>
+    <div class="container1">
+        <div class="button-container">
+            <button id="copyButton">Copy</button>
+            <button id="pasteButton">Paste</button>
+        </div>
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+        <div class="output-box">
+            <div class="output-grid">
+                <div class="output-item"><strong>Characters (with spaces):</strong> <span id="charCountInc">0</span></div>
+                <div class="output-item"><strong>Characters (no spaces):</strong> <span id="charCountExc">0</span></div>
+                <div class="output-item"><strong>Words:</strong> <span id="wordCount">0</span></div>
+                <div class="output-item"><strong>Sentences:</strong> <span id="sentenceCount">0</span></div>
+                <div class="output-item"><strong>Paragraphs:</strong> <span id="paragraphCount">0</span></div>
+                <div class="output-item"><strong>Spaces:</strong> <span id="spaceCount">0</span></div>
+                <div class="output-item"><strong>Reading Time:</strong> <span id="readingTime">0 min</span></div>
             </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span>Text Analysis Results</span>
-                    <span class="icon">📊</span>
-                </div>
-                <div class="card-body">
-                    <div id="results-container">
-                        <div id="empty-state">
-                            <p>Enter text and click "Analyze Text" to see detailed statistics.</p>
-                            <ul class="feature-list">
-                                <li class="feature-item">
-                                    <span class="feature-icon">✓</span>
-                                    <span>Word, character, and sentence counts</span>
-                                </li>
-                                <li class="feature-item">
-                                    <span class="feature-icon">✓</span>
-                                    <span>Reading and speaking time estimates</span>
-                                </li>
-                                <li class="feature-item">
-                                    <span class="feature-icon">✓</span>
-                                    <span>Readability scoring</span>
-                                </li>
-                                <li class="feature-item">
-                                    <span class="feature-icon">✓</span>
-                                    <span>Top keywords and frequency analysis</span>
-                                </li>
-                                <li class="feature-item">
-                                    <span class="feature-icon">✓</span>
-                                    <span>Writing style suggestions</span>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <div id="analysis-results" style="display: none;">
-                            <div class="tabs">
-                                <div class="tab-item active" data-tab="basic-stats">Basic Stats</div>
-                                <div class="tab-item" data-tab="readability">Readability</div>
-                                <div class="tab-item" data-tab="word-analysis">Word Analysis</div>
-                                <div class="tab-item" data-tab="suggestions">Suggestions</div>
-                            </div>
-                            
-                            <div id="basic-stats" class="tab-content active">
-                                <div class="stat-grid">
-                                    <div class="stat-card">
-                                        <div class="stat-value words-stat" id="word-count">0</div>
-                                        <div class="stat-label">Words</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-value chars-stat" id="char-count">0</div>
-                                        <div class="stat-label">Characters</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-value chars-stat" id="char-no-spaces-count">0</div>
-                                        <div class="stat-label">Chars (no spaces)</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-value sentences-stat" id="sentence-count">0</div>
-                                        <div class="stat-label">Sentences</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-value paragraph-stat" id="paragraph-count">0</div>
-                                        <div class="stat-label">Paragraphs</div>
-                                    </div>
-                                    <div class="stat-card">
-                                        <div class="stat-value readtime-stat" id="read-time">0</div>
-                                        <div class="stat-label">Reading Time</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="progress-container">
-                                    <div class="progress-item">
-                                        <div class="progress-header">
-                                            <span class="progress-label">Average Word Length</span>
-                                            <span class="progress-value" id="avg-word-length">0</span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="avg-word-bar" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-item">
-                                        <div class="progress-header">
-                                            <span class="progress-label">Average Sentence Length</span>
-                                            <span class="progress-value" id="avg-sentence-length">0</span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="avg-sentence-bar" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="score-container">
-                                    <div class="score-circle" id="diversity-score-circle">85</div>
-                                    <div class="score-details">
-                                        <div class="score-title">Vocabulary Diversity Score</div>
-                                        <div class="score-description">Measures how varied your vocabulary is in this text. Higher scores indicate less repetition and a richer vocabulary.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="readability" class="tab-content">
-                                <div class="score-container">
-                                    <div class="score-circle" id="readability-score-circle">0</div>
-                                    <div class="score-details">
-                                        <div class="score-title">Flesch Reading Ease</div>
-                                        <div class="score-description">
-                                            <span id="readability-description">Higher scores indicate text that is easier to read.</span>
-                                            <span class="tooltip">ⓘ
-                                                <span class="tooltip-text">
-                                                    90-100: Very Easy (5th grade)<br>
-                                                    80-89: Easy (6th grade)<br>
-                                                    70-79: Fairly Easy (7th grade)<br>
-                                                    60-69: Standard (8-9th grade)<br>
-                                                    50-59: Fairly Difficult (10-12th grade)<br>
-                                                    30-49: Difficult (College)<br>
-                                                    0-29: Very Difficult (College Graduate)
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="progress-container">
-                                    <div class="progress-item">
-                                        <div class="progress-header">
-                                            <span class="progress-label">Flesch-Kincaid Grade Level</span>
-                                            <span class="progress-value" id="fk-grade">0</span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="fk-grade-bar" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-item">
-                                        <div class="progress-header">
-                                            <span class="progress-label">Gunning Fog Index</span>
-                                            <span class="progress-value tooltip" id="gunning-fog">
-                                                0
-                                                <span class="tooltip-text">Estimates the years of formal education needed to understand the text on first reading.</span>
-                                            </span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="gunning-fog-bar" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-item">
-                                        <div class="progress-header">
-                                            <span class="progress-label">Coleman-Liau Index</span>
-                                            <span class="progress-value" id="coleman-liau">0</span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="coleman-liau-bar" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-item">
-                                        <div class="progress-header">
-                                            <span class="progress-label">SMOG Index</span>
-                                            <span class="progress-value tooltip" id="smog-index">
-                                                0
-                                                <span class="tooltip-text">Simple Measure of Gobbledygook - estimates the years of education needed to understand a piece of writing.</span>
-                                            </span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="smog-bar" style="width: 0%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="alert alert-warning">
-                                    <span id="readability-recommendation">Enter text to get readability recommendations.</span>
-                                </div>
-                            </div>
-                            
-                            <div id="word-analysis" class="tab-content">
-                                <h3>Top Keywords</h3>
-                                <div id="keywords-container"></div>
-                                
-                                <div class="word-table-container">
-                                    <table class="word-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Word</th>
-                                                <th>Count</th>
-                                                <th>Frequency</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="word-frequency-table">
-                                            <!-- Word frequency data will be inserted here -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <h3 style="margin-top: 1.5rem">Word Length Distribution</h3>
-                                <div id="word-length-chart" class="chart-container">
-                                    <canvas></canvas>
-                                </div>
-                            </div>
-                            
-                            <div id="suggestions" class="tab-content">
-                                <div id="suggestions-container" class="suggestions-container">
-                                    <p>Writing style suggestions will appear here after analysis.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const inputText = document.getElementById('input-text');
-            const analyzeBtn = document.getElementById('analyze-btn');
-            const clearBtn = document.getElementById('clear-btn');
-            const copyResultsBtn = document.getElementById('copy-results-btn');
-            const resultsContainer = document.getElementById('results-container');
-            const emptyState = document.getElementById('empty-state');
-            const analysisResults = document.getElementById('analysis-results');
-            const tabItems = document.querySelectorAll('.tab-item');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const sampleTextBtn = document.getElementById('sample-text-btn');
-            const fileInput = document.getElementById('file-input');
-            const fileSelectBtn = document.getElementById('file-select-btn');
-            const dropZone = document.getElementById('drop-zone');
-            
-            // Sample text for demo purposes
-            const sampleText = `The Advanced Word Count Analyzer is a powerful tool designed to provide comprehensive text analysis. It gives you detailed insights about your writing, including word count, character count, sentence structure, readability metrics, and vocabulary diversity.\n\nThis tool is perfect for writers, students, and professionals who need to analyze their text for various purposes. You can use it to optimize your content for specific reading levels, improve readability, and ensure your message is communicated effectively.\n\nWith features like readability scoring, keyword analysis, and writing style suggestions, you can fine-tune your text to meet your specific goals. Whether you're writing an academic paper, a blog post, or a professional document, this analyzer helps you understand and improve your writing.\n\nThe user-friendly interface makes it easy to paste your text and get immediate results. Try it now by analyzing this sample text or input your own content to see detailed statistics and suggestions!`;
-            
-            // Event Listeners
-            analyzeBtn.addEventListener('click', analyzeText);
-            clearBtn.addEventListener('click', clearText);
-            copyResultsBtn.addEventListener('click', copyResults);
-            sampleTextBtn.addEventListener('click', insertSampleText);
-            fileSelectBtn.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleFileSelect);
-            
-            // Tab switching
-            tabItems.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabItems.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    tab.classList.add('active');
-                    const tabContent = document.getElementById(tab.getAttribute('data-tab'));
-                    tabContent.classList.add('active');
-                });
-            });
-            
-            // File drag and drop
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-            
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('dragover');
-            });
-            
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('dragover');
-                
-                if (e.dataTransfer.files.length) {
-                    handleFiles(e.dataTransfer.files);
-                }
-            });
-            
-            // Functions
-            function handleFileSelect(e) {
-                const files = e.target.files;
-                handleFiles(files);
-            }
-            
-            function handleFiles(files) {
-                const file = files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    inputText.value = e.target.result;
-                };
-                
-                reader.readAsText(file);
-            }
-            
-            function insertSampleText() {
-                inputText.value = sampleText;
-            }
-            
-            function clearText() {
-                inputText.value = '';
-                showEmptyState();
-            }
-            
-            function copyResults() {
-                // Create a text representation of all results
-                let resultText = "ADVANCED WORD COUNT ANALYSIS\n\n";
-                
-                // Basic Stats
-                resultText += "BASIC STATISTICS\n";
-                resultText += "----------------\n";
-                resultText += `Words: ${document.getElementById('word-count').textContent}\n`;
-                resultText += `Characters: ${document.getElementById('char-count').textContent}\n`;
-                resultText += `Characters (no spaces): ${document.getElementById('char-no-spaces-count').textContent}\n`;
+        const textInput = document.getElementById('textInput');
+        const copyButton = document.getElementById('copyButton');
+        const pasteButton = document.getElementById('pasteButton');
+
+        // Update counts
+        textInput.addEventListener('input', function () {
+            const text = this.value;
+
+            document.getElementById('charCountInc').textContent = text.length;
+            document.getElementById('charCountExc').textContent = text.replace(/\s+/g, '').length;
+            document.getElementById('wordCount').textContent = text.trim().split(/\s+/).filter(word => word).length;
+            document.getElementById('sentenceCount').textContent = text.split(/[.!?]/).filter(sentence => sentence.trim().length > 0).length;
+            document.getElementById('paragraphCount').textContent = text.split(/\n+/).filter(paragraph => paragraph.trim().length > 0).length;
+            document.getElementById('spaceCount').textContent = text.split(' ').length - 1;
+            document.getElementById('readingTime').textContent = Math.ceil(text.trim().split(/\s+/).length / 200) + ' min';
+        });
+
+        // Copy to clipboard
+        copyButton.addEventListener('click', function () {
+            textInput.select();
+            document.execCommand('copy');
+        });
+
+        // Paste from clipboard
+        pasteButton.addEventListener('click', async function () {
+            const text = await navigator.clipboard.readText();
+            textInput.value = text;
+            textInput.dispatchEvent(new Event('input'));
+        });
+    </script>
+
+<br><br><br>
+
+<p><span style="font-family: georgia;">In the digital age, word and character count is a crucial aspect of content creation, whether you're writing an article, preparing a report, or composing a message. Understanding how to track these metrics is vital for meeting word limits, optimizing content for SEO, or ensuring your text fits within specific constraints, such as social media platforms, academic papers, or professional documents. This guide provides an in-depth look at word and character count, highlighting why they matter and how you can easily calculate them using various methods.</span></p><h3><strong><span style="font-family: georgia;">What Is Word Count?</span></strong></h3><p><span style="font-family: georgia;">Word count refers to the total number of words in a given text. It is often used to measure the length of a document and is an important factor in various contexts such as:</span></p><ul><li><span style="font-family: georgia;"><strong>Writing and Publishing</strong>: Authors, journalists, and writers are frequently asked to meet specific word limits for articles, books, and essays.</span></li><li><span style="font-family: georgia;"><strong>Academic Papers</strong>: Many universities and institutions impose word limits on research papers, essays, or theses to ensure students can concisely express their ideas.</span></li><li><span style="font-family: georgia;"><strong>Social Media</strong>: Platforms like Twitter and Instagram often impose character and word limits for posts and captions, making word count crucial in crafting effective communication.</span></li><li><span style="font-family: georgia;"><strong>SEO and Web Content</strong>: In the world of digital marketing, word count plays a role in SEO optimization. Google and other search engines often give higher rankings to content that is comprehensive and detailed, which typically involves a higher word count.</span></li></ul><h3><strong><span style="font-family: georgia;">What Is Character Count?</span></strong></h3><p><span style="font-family: georgia;">Character count refers to the total number of characters (letters, numbers, punctuation marks, and spaces) in a text. Character count is crucial in situations where space is limited, such as:</span></p><ul><li><span style="font-family: georgia;"><strong>SMS/Text Messages</strong>: SMS services typically restrict messages to 160 characters, making character count essential for crafting concise messages.</span></li><li><span style="font-family: georgia;"><strong>Twitter Posts</strong>: While Twitter originally had a 140-character limit, it now allows 280 characters per tweet. Still, understanding how to manage character count helps in crafting concise and engaging content.</span></li><li><span style="font-family: georgia;"><strong>SEO and Meta Descriptions</strong>: Meta descriptions on websites need to be within a specific character limit to display correctly in search engine results. Typically, a meta description should not exceed 160 characters to avoid being cut off in search results.</span></li></ul><h3><strong><span style="font-family: georgia;">Why Do Word and Character Counts Matter?</span></strong></h3><p><span style="font-family: georgia;">Understanding word and character counts is essential for several reasons:</span></p><ul><li><span style="font-family: georgia;"><strong>Adhering to Guidelines</strong>: Whether you're submitting an article, essay, or social media post, knowing your word or character count helps you stay within the required limits. Exceeding these limits can result in penalties or rejection.</span></li><li><span style="font-family: georgia;"><strong>Content Quality</strong>: Word and character count can serve as an indicator of content quality. Too few words may suggest that the content is not thorough enough, while too many words might indicate unnecessary verbosity. Striking the right balance is key to delivering clear, concise, and effective content.</span></li><li><span style="font-family: georgia;"><strong>Time Management</strong>: For writers and content creators, knowing the word count helps in estimating the time required to complete a task. Similarly, tracking character count ensures that messages fit within limits for various platforms.</span></li><li><span style="font-family: georgia;"><strong>Improving Readability</strong>: Both word and character counts can be used as tools to improve readability. Shorter sentences and paragraphs, driven by mindful word and character count, contribute to more digestible content.</span></li></ul><h3><strong><span style="font-family: georgia;">How to Calculate Word and Character Count</span></strong></h3><p><span style="font-family: georgia;">There are several ways to calculate word and character count, depending on your needs and preferences. Here’s a breakdown of the most common methods:</span></p><h3><strong><span style="font-family: georgia;">Online Word and Character Count Tools</span></strong></h3><p><span style="font-family: georgia;">One of the easiest ways to calculate word and character count is by using online tools. These tools allow you to copy and paste your text, and they automatically count the words and characters. Some popular word and character count tools include:</span></p><ul><li><span style="font-family: georgia;"><strong>WordCounter</strong>: An online tool that not only counts words and characters but also provides insights into keyword density and readability.</span></li><li><span style="font-family: georgia;"><strong>CharacterCountOnline</strong>: A simple tool for counting characters and words, with the ability to exclude or include spaces.</span></li><li><span style="font-family: georgia;"><strong>Word Count Tool</strong>: Offers a straightforward word and character count along with a real-time counter that updates as you type.</span></li></ul><h3><strong><span style="font-family: georgia;">Best Practices for Word and Character Count</span></strong></h3><p><span style="font-family: georgia;">Here are some tips to keep in mind when working with word and character counts:</span></p><ul><li><span style="font-family: georgia;"><strong>Be concise but comprehensive</strong>: Avoid unnecessary filler words. Focus on delivering value through your content.</span></li><li><span style="font-family: georgia;"><strong>Adhere to limits</strong>: Always ensure that your text meets the required word or character count for your specific use case (e.g., for SEO, academic papers, or social media).</span></li><li><span style="font-family: georgia;"><strong>Optimize for readability</strong>: Breaking content into digestible sections, keeping paragraphs short, and avoiding overly complex sentences can make your text easier to read and more engaging.</span></li></ul><h3><strong><span style="font-family: georgia;">Conclusion</span></strong></h3><p><span style="font-family: georgia;">Understanding and managing word and character counts is an essential skill for content creators, writers, marketers, and developers. Whether you're working on an article, social media post, or academic paper, knowing how to count words and characters helps you stay within constraints and communicate effectively. By using online tools, word processors, or programming scripts, you can easily calculate word and character count to ensure your content is polished, concise, and effective.</span></p>
