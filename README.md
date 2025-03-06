@@ -132,7 +132,7 @@
     <button class="toggle-dark-mode" onclick="toggleDarkMode()">Dark Mode</button>
 
     <div class="container1">
-     <h1>Advanced Word Counter & Text Analyzer</h1>
+     <h1>Word Counter & Text Analyzer</h1>
         <div class="button-container">
             <button id="copyButton">Copy</button>
             <button id="pasteButton">Paste</button>
