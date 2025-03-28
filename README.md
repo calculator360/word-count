@@ -173,6 +173,11 @@
             document.body.classList.toggle('dark-mode');
         }
     </script>
+
+    <div class="footer">
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> Mini web Tool. All Rights Reserved. | 
+    Powered by <a href="https://www.miniwebtool.live/" target="_blank">MiniWebTool</a></p>
+</div>
  <p>Keeping track of the number of words in a document is essential for writers, students, and professionals. A <strong>Word Count</strong> tool helps users quickly determine the number of words, characters, and even sentences in their text.</p>
 
         <h2 style="color: #d6336c;">What is a Word Count Tool?</h2>
