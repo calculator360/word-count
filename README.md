@@ -174,10 +174,7 @@
         }
     </script>
 
-    <div class="footer">
-    <p>&copy; <script>document.write(new Date().getFullYear())</script> Mini web Tool. All Rights Reserved. | 
-    Powered by <a href="https://www.miniwebtool.live/" target="_blank">MiniWebTool</a></p>
-</div>
+   
  <p>Keeping track of the number of words in a document is essential for writers, students, and professionals. A <strong>Word Count</strong> tool helps users quickly determine the number of words, characters, and even sentences in their text.</p>
 
         <h2 style="color: #d6336c;">What is a Word Count Tool?</h2>
@@ -207,8 +204,9 @@
         <h2 style="color: #d6336c;">Conclusion</h2>
         <p>The <strong>Word Count</strong> tool is essential for writers, bloggers, students, and professionals. It saves time and ensures accuracy in writing tasks, making it an invaluable resource for content creation.</p>
 
-        <p style="text-align: center; font-size: 14px; color: #555; margin-top: 20px;">
-            &copy; 2025 <a href="https://www.calculator360.info" style="color: #d6336c; text-decoration: none;" target="_blank" rel="dofollow">Calculator360.info</a>. All Rights Reserved.
-        </p>
+     <div class="footer">
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> Mini web Tool. All Rights Reserved. | 
+    Powered by <a href="https://www.miniwebtool.live/" target="_blank">MiniWebTool</a></p>
+</div>
 </body>
 </html>
